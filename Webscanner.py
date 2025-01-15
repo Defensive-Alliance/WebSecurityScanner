@@ -177,7 +177,7 @@ class WebSecurityScanner:
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python scanner.py <target_url>")
+        print("Usage: python webscanner.py <target_url>")
         sys.exit(1)
 
     target_url = sys.argv[1]
