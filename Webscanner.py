@@ -7,7 +7,6 @@ from concurrent.futures import ThreadPoolExecutor
 import sys
 from typing import List, Dict, Set
 
-
 class WebSecurityScanner:
     def __init__(self, target_url: str, max_depth: int = 3):
         """
@@ -58,8 +57,6 @@ class WebSecurityScanner:
         except Exception as e:
             print(f"Error crawling {url}: {str(e)}")
 
-
-    # Check for sql injection vulnerabilities in  GET requests and POST parameters in POST requests
     def check_sql_injection(self, url: str) -> None:
         """Test for potential SQL injection vulnerabilities"""
         sql_payloads = ["'", "1' OR '1'='1", "' OR 1=1--", "' UNION SELECT NULL--"]
@@ -90,7 +87,6 @@ class WebSecurityScanner:
             except Exception as e:
                 print(f"Error testing SQL injection on {url}: {str(e)}")
 
-    # Check for Cross-Site Scripting vulnerabilities in GET parameters
     def check_xss(self, url: str) -> None:
         """Test for potential Cross-Site Scripting vulnerabilities"""
         xss_payloads = [
@@ -150,35 +146,34 @@ class WebSecurityScanner:
         except Exception as e:
             print(f"Error checking sensitive information on {url}: {str(e)}")
 
-# Implementing the Main Scanning Logic
-def scan(self) -> List[Dict]:
-    """
-    Main scanning method that coordinates the security checks
+    def scan(self) -> List[Dict]:
+        """
+        Main scanning method that coordinates the security checks
 
-    Returns:
-        List of discovered vulnerabilities
-    """
-    print(f"\n{colorama.Fore.BLUE}Starting security scan of {self.target_url}{colorama.Style.RESET_ALL}\n")
+        Returns:
+            List of discovered vulnerabilities
+        """
+        print(f"\n{colorama.Fore.BLUE}Starting security scan of {self.target_url}{colorama.Style.RESET_ALL}\n")
 
-    # First, crawl the website
-    self.crawl(self.target_url)
+        # First, crawl the website
+        self.crawl(self.target_url)
 
-    # Then run security checks on all discovered URLs
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        for url in self.visited_urls:
-            executor.submit(self.check_sql_injection, url)
-            executor.submit(self.check_xss, url)
-            executor.submit(self.check_sensitive_info, url)
+        # Then run security checks on all discovered URLs
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            for url in self.visited_urls:
+                executor.submit(self.check_sql_injection, url)
+                executor.submit(self.check_xss, url)
+                executor.submit(self.check_sensitive_info, url)
 
-    return self.vulnerabilities
+        return self.vulnerabilities
 
-def report_vulnerability(self, vulnerability: Dict) -> None:
-    """Record and display found vulnerabilities"""
-    self.vulnerabilities.append(vulnerability)
-    print(f"{colorama.Fore.RED}[VULNERABILITY FOUND]{colorama.Style.RESET_ALL}")
-    for key, value in vulnerability.items():
-        print(f"{key}: {value}")
-    print()
+    def report_vulnerability(self, vulnerability: Dict) -> None:
+        """Record and display found vulnerabilities"""
+        self.vulnerabilities.append(vulnerability)
+        print(f"{colorama.Fore.RED}[VULNERABILITY FOUND]{colorama.Style.RESET_ALL}")
+        for key, value in vulnerability.items():
+            print(f"{key}: {value}")
+        print()
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -193,9 +188,3 @@ if __name__ == "__main__":
     print(f"\n{colorama.Fore.GREEN}Scan Complete!{colorama.Style.RESET_ALL}")
     print(f"Total URLs scanned: {len(scanner.visited_urls)}")
     print(f"Vulnerabilities found: {len(vulnerabilities)}")
-
-
-
-
-
-
