@@ -149,6 +149,36 @@ class WebSecurityScanner:
     except Exception as e:
         print(f"Error checking sensitive information on {url}: {str(e)}")
 
+# Implementing the Main Scanning Logic
+def scan(self) -> List[Dict]:
+    """
+    Main scanning method that coordinates the security checks
+
+    Returns:
+        List of discovered vulnerabilities
+    """
+    print(f"\n{colorama.Fore.BLUE}Starting security scan of {self.target_url}{colorama.Style.RESET_ALL}\n")
+
+    # First, crawl the website
+    self.crawl(self.target_url)
+
+    # Then run security checks on all discovered URLs
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        for url in self.visited_urls:
+            executor.submit(self.check_sql_injection, url)
+            executor.submit(self.check_xss, url)
+            executor.submit(self.check_sensitive_info, url)
+
+    return self.vulnerabilities
+
+def report_vulnerability(self, vulnerability: Dict) -> None:
+    """Record and display found vulnerabilities"""
+    self.vulnerabilities.append(vulnerability)
+    print(f"{colorama.Fore.RED}[VULNERABILITY FOUND]{colorama.Style.RESET_ALL}")
+    for key, value in vulnerability.items():
+        print(f"{key}: {value}")
+    print()
+
 
 
 
