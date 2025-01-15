@@ -133,9 +133,11 @@ class WebSecurityScanner:
         'api_key': r'api[_-]?key[_-]?([\'"|`])([a-zA-Z0-9]{32,45})\1'
     }
 
+    # for loop to test each pattern
     try:
         response = self.session.get(url)
 
+        # Look for sensitive information in the response
         for info_type, pattern in sensitive_patterns.items():
             matches = re.finditer(pattern, response.text)
             for match in matches:
@@ -146,6 +148,7 @@ class WebSecurityScanner:
                     'pattern': pattern
                 })
 
+    # Exception handling for potential errors
     except Exception as e:
         print(f"Error checking sensitive information on {url}: {str(e)}")
 
